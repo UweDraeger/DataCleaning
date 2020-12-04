@@ -3,7 +3,7 @@
 library(tidyverse)
 
 setwd(
-        "~/Coursera/Scripts and Data/Getting and Cleaning Data/getdata_projectfiles_UCI HAR Dataset/UCI HAR Dataset"
+        "~/Coursera/ DataCleaning"
 )
 
 # read activity labels
@@ -62,13 +62,15 @@ X_train <-
                 paste0(file.path(getwd(), "train", "X_train.txt")),
                 delim = " ",
                 col_names = t(feature_labels[2])
-        )
+        ) %>% 
+        select(any_of(grep("-mean()", colnames(X_train))), any_of(grep("-std()", colnames(X_train))) )
 X_test <-
         read_delim(
                 paste0(file.path(getwd(), "test", "X_test.txt")),
                 delim = " ",
                 col_names = t(feature_labels[2])
-        )
+        ) %>% 
+        select(any_of(grep("-mean()", colnames(X_test))), any_of(grep("-std()", colnames(X_test))) )
 
 body_acc_x_train <- 
         read_delim(
@@ -82,6 +84,7 @@ body_acc_x_test <-
                 delim = " ",
                 col_names = FALSE
         )
+
 
 # You should create one R script called run_analysis.R that does the following.
 
