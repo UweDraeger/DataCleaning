@@ -20,24 +20,30 @@ feature_labels <-
                    col_names = c("feature_id", "feature"))
 
 
-# read subject_train, subject_test - Do I need those as analysis focused on mean and std?
+# read subject_train, subject_test
+# rename X1 to subject_id
+
 subj_train <-
         read_delim(paste0(file.path(getwd(), "train", "subject_train.txt")),
                    delim = " ",
-                   col_names = FALSE)
+                   col_names = FALSE) %>%
+        rename(subject_id = "subject_id")
+
 subj_test <-
         read_delim(paste0(file.path(getwd(), "test", "subject_test.txt")),
                    delim = " ",
-                   col_names = FALSE)
+                   col_names = "subject_id") 
 
 # read y_train, y_test
 # create surrogate keys, then join the activity labels
+
 y_train <-
         read_delim(paste0(file.path(getwd(), "train", "y_train.txt")),
                    delim = " ",
                    col_names = FALSE)
 y_train <- rowid_to_column(y_train, var = "y_id") %>%
         mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)])
+
 y_test <-
         read_delim(paste0(file.path(getwd(), "test", "y_test.txt")),
                    delim = " ",
@@ -45,38 +51,32 @@ y_test <-
 y_test <- rowid_to_column(y_test, var = "y_id") %>%
         mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)])
 
-# read X_train, X_test - Do I need to care for NA's - problems(X-test)?
-# assumes same order when extracting column names of feature, which seems
-# logical
+# read X_train, X_test with feature labels as column names
+# join with activity labels
+# add variable to flag origin as train or
+
+# assumes same order when extracting column names of feature, which seems logical
+# Do I need to care for NA's - see problems(X-test)?
+
 X_train <-
         read_delim(paste0(file.path(getwd(), "train", "X_train.txt")),
                    delim = " ",
                    col_names = t(feature_labels[2]))
-X_train <- X_train %>%
+X_train <- bind_cols(y_train, X_train) %>%
         select(any_of(grep("-mean()", colnames(X_train))), any_of(grep("-std()", colnames(X_train)))) %>%
         mutate(train_test = "train")
+
+
 X_test <-
         read_delim(paste0(file.path(getwd(), "test", "X_test.txt")),
                    delim = " ",
-                   col_names = t(feature_labels[2]))
-X_test <-  X_test %>%
+                   col_names = t(feature_labels[2])) 
+X_test <- bind_cols(y_test, X_test) %>%
         select(any_of(grep("-mean()", colnames(X_test))), any_of(grep("-std()", colnames(X_test)))) %>%
-        mutate(train_test = "test")
+        mutate(train_test = "test") 
 
-body_acc_x_train <-
-        read_delim(paste0(
-                file.path(getwd(), "train", "Inertial Signals", "body_acc_x_train.txt")
-        ),
-        delim = " ",
-        col_names = FALSE)
-body_acc_x_test <-
-        read_delim(paste0(
-                file.path(getwd(), "test", "Inertial Signals", "body_acc_x_test.txt")
-        ),
-        delim = " ",
-        col_names = FALSE)
-
-
+# X_combined <- bind_rows(X_train, X_test)
+        
 # You should create one R script called run_analysis.R that does the following.
 
 # 1. Merges the training and the test sets to create one data set.
