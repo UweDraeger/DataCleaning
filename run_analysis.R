@@ -22,12 +22,10 @@ feature_labels <-
 
 # read subject_train, subject_test
 # rename X1 to subject_id
-
 subj_train <-
         read_delim(paste0(file.path(getwd(), "train", "subject_train.txt")),
                    delim = " ",
-                   col_names = FALSE) %>%
-        rename(subject_id = "subject_id")
+                   col_names = "subject_id")
 
 subj_test <-
         read_delim(paste0(file.path(getwd(), "test", "subject_test.txt")),
@@ -35,21 +33,24 @@ subj_test <-
                    col_names = "subject_id") 
 
 # read y_train, y_test
-# create surrogate keys, then join the activity labels
+# create surrogate keys, then add the activity labels
 
 y_train <-
         read_delim(paste0(file.path(getwd(), "train", "y_train.txt")),
                    delim = " ",
                    col_names = FALSE)
-y_train <- rowid_to_column(y_train, var = "y_id") %>%
-        mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)])
+y_train <- rowid_to_column(y_train, var = "run_id") %>%
+        mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)]) %>%
+        rename(activity_id = X1)
 
 y_test <-
         read_delim(paste0(file.path(getwd(), "test", "y_test.txt")),
                    delim = " ",
                    col_names = FALSE)
-y_test <- rowid_to_column(y_test, var = "y_id") %>%
-        mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)])
+y_test <- rowid_to_column(y_test, var = "run_id") %>%
+        mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)]) %>%
+        rename(activity_id = X1)
+
 
 # read X_train, X_test with feature labels as column names
 # join with activity labels
