@@ -57,24 +57,27 @@ y_test <- rowid_to_column(y_test, var = "run_id") %>%
 # add variable to flag origin as train or
 
 # assumes same order when extracting column names of feature, which seems logical
-# Do I need to care for NA's - see problems(X-test)?
+# I need to care for NA's - see problems(X-test)?
 
 X_train <-
         read_delim(paste0(file.path(getwd(), "train", "X_train.txt")),
                    delim = " ",
                    col_names = t(feature_labels[2]))
-X_train <- bind_cols(y_train, X_train) %>%
-        select(any_of(grep("-mean()", colnames(X_train))), any_of(grep("-std()", colnames(X_train)))) %>%
-        mutate(train_test = "train")
-
+X_train <-
+        select(X_train, any_of(grep("-mean()|-std()", colnames(X_train))))
+X_train <- bind_cols(y_train, X_train)
+X_train <- mutate(X_train, train_test = "train")
 
 X_test <-
         read_delim(paste0(file.path(getwd(), "test", "X_test.txt")),
                    delim = " ",
-                   col_names = t(feature_labels[2])) 
-X_test <- bind_cols(y_test, X_test) %>%
-        select(any_of(grep("-mean()", colnames(X_test))), any_of(grep("-std()", colnames(X_test)))) %>%
-        mutate(train_test = "test") 
+                   col_names = t(feature_labels[2]))
+X_test <-
+        select(X_test, any_of(grep("-mean()|-std()", colnames((
+                X_test
+        )))))
+X_test <- bind_cols(y_test, X_test)
+X_test <- mutate(X_test, train_test = "test")
 
 # X_combined <- bind_rows(X_train, X_test)
 
