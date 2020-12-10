@@ -60,8 +60,7 @@ y_test <- rowid_to_column(y_test, var = "run_id") %>%
 # I need to care for NA's - see problems(X-test)?
 
 X_train <-
-        read_delim(paste0(file.path(getwd(), "train", "X_train.txt")),
-                   delim = " ",
+        read_table2(paste0(file.path(getwd(), "train", "X_train.txt")),
                    col_names = t(feature_labels[2]))
 X_train <-
         select(X_train, any_of(grep("-mean()|-std()", colnames(X_train))))
@@ -69,8 +68,7 @@ X_train <- bind_cols(y_train, X_train)
 X_train <- mutate(X_train, train_test = "train")
 
 X_test <-
-        read_delim(paste0(file.path(getwd(), "test", "X_test.txt")),
-                   delim = " ",
+        read_table2(paste0(file.path(getwd(), "test", "X_test.txt")),
                    col_names = t(feature_labels[2]))
 X_test <-
         select(X_test, any_of(grep("-mean()|-std()", colnames((
@@ -79,7 +77,7 @@ X_test <-
 X_test <- bind_cols(y_test, X_test)
 X_test <- mutate(X_test, train_test = "test")
 
-# X_combined <- bind_rows(X_train, X_test)
+X_combined <- bind_rows(X_train, X_test)
 
 # You should create one R script called run_analysis.R that does the following.
 
