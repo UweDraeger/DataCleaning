@@ -1,6 +1,3 @@
-
-
-
 library(tidyverse)
 
 setwd("~/Coursera/ DataCleaning")
@@ -30,10 +27,10 @@ subj_train <-
 subj_test <-
         read_delim(paste0(file.path(getwd(), "test", "subject_test.txt")),
                    delim = " ",
-                   col_names = "subject_id") 
+                   col_names = "subject_id")
 
 # read y_train, y_test
-# create surrogate keys, then add the activity labels
+# create surrogate keys, then add subject_id, activity id and label
 
 y_train <-
         read_delim(paste0(file.path(getwd(), "train", "y_train.txt")),
@@ -42,6 +39,8 @@ y_train <-
 y_train <- rowid_to_column(y_train, var = "run_id") %>%
         mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)]) %>%
         rename(activity_id = X1)
+y_train <-
+        y_train %>% add_column(subject_id = subj_train$subject_id, .after = y_train$run_id)
 
 y_test <-
         read_delim(paste0(file.path(getwd(), "test", "y_test.txt")),
@@ -50,18 +49,17 @@ y_test <-
 y_test <- rowid_to_column(y_test, var = "run_id") %>%
         mutate(activity = activity_labels$activity[match(X1, activity_labels$activity_id)]) %>%
         rename(activity_id = X1)
+y_test <-
+        y_test %>% add_column(subject_id = subj_test$subject_id, .after = y_test$run_id)
 
 
 # read X_train, X_test with feature labels as column names
 # join with activity labels
 # add variable to flag origin as train or
 
-# assumes same order when extracting column names of feature, which seems logical
-# I need to care for NA's - see problems(X-test)?
-
 X_train <-
         read_table2(paste0(file.path(getwd(), "train", "X_train.txt")),
-                   col_names = t(feature_labels[2]))
+                    col_names = t(feature_labels[2]))
 X_train <-
         select(X_train, any_of(grep("-mean()|-std()", colnames(X_train))))
 X_train <- bind_cols(y_train, X_train)
@@ -69,7 +67,7 @@ X_train <- mutate(X_train, train_test = "train")
 
 X_test <-
         read_table2(paste0(file.path(getwd(), "test", "X_test.txt")),
-                   col_names = t(feature_labels[2]))
+                    col_names = t(feature_labels[2]))
 X_test <-
         select(X_test, any_of(grep("-mean()|-std()", colnames((
                 X_test
