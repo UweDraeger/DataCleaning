@@ -1,3 +1,30 @@
+=========================================
+Peer-graded Assignment: Getting and Cleaning Data Course Project (course 3 of 5 
+in the Data Science: Foundations using R Specialization by Johns Hopkins University
+Amended from the original authors' version below by
+Uwe Draeger
+=========================================
+
+The dataset includes an additional file:
+=========================================
+
+- 'subj_activity_avg.txt': Shows average means and average standard deviations of each subjects' measures by activity.
+Allows an assessment of the variability introduced to these summary measures by the coice of individual study participants.
+
+
+
+
+Please note there might be a typo in the original:
+
+- 'train/Inertial Signals/total_acc_x_train.txt': The acceleration signal from the smartphone accelerometer X axis in standard gravity units 'g'. Every row shows a 128 element vector. The same description applies for the 'total_acc_x_train.txt' and 'total_acc_z_train.txt' files for the Y and Z axis. 
+
+The last sentence should probably read:
+The same description applies for the 'total_acc_y_train.txt' and 'total_acc_z_train.txt' files for the Y and Z axis. 
+
+
+==================================================================
+Begin of original text
+
 ==================================================================
 Human Activity Recognition Using Smartphones Dataset
 Version 1.0
