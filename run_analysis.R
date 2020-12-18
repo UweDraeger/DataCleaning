@@ -3,8 +3,7 @@ library(tidyverse)
 # read activity labels
 activity_labels <- read_delim("activity_labels.txt",
                 delim = " ",
-                col_names = c("activity_id", "activity")
-        )
+                col_names = c("activity_id", "activity"))
 
 # read feature labels
 feature_labels <- read_delim("features.txt",
@@ -13,7 +12,6 @@ feature_labels <- read_delim("features.txt",
 
 
 # read subject_train, subject_test
-# rename X1 to subject_id
 subj_train <- read_delim(paste0(file.path(getwd(), "train", "subject_train.txt")),
                 delim = " ",
                 col_names = "subject_id")
