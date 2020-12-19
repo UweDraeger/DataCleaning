@@ -21,7 +21,7 @@ subj_test <- read_delim(paste0(file.path(getwd(), "test", "subject_test.txt")),
                 col_names = "subject_id")
 
 # read y_train, y_test
-# create surrogate keys, then add subject_id, activity id and label
+# create surrogate keys, then add activity matched by activity id, add subject_id 
 
 y_train <-  read_delim(paste0(file.path(getwd(), "train", "y_train.txt")),
                 delim = " ",

@@ -1,3 +1,4 @@
+
 =========================================
 Peer-graded Assignment: Getting and Cleaning Data Course Project (course 3 of 5 
 in the Data Science: Foundations using R Specialization by Johns Hopkins University
@@ -8,10 +9,16 @@ Uwe Draeger
 The dataset includes an additional file:
 =========================================
 
-- 'subj_activity_avg.txt': Shows average means and average standard deviations of each subjects' measures by activity.
 
-Allows an assessment of the variability in these summary measures introduced by the choice of individual study participants.
+- 'subj_activity_avg.txt': Shows average means and average standard deviations of each measure by subject and activity.
 
+Purpose: Allows an assessment of the variability in these summary measures introduced by the choice of individual study participants.
+
+The data set is "tidy" as there is a single row per subject - activity combination.
+Each variable is put into a single column, referencing the mean or standard deviation
+of the measures. Columns are labeled in a way to easily allow to reference the 
+variables back to the original measures.
+The calculated values occupy a single cell in the tibble.
 
 
 
